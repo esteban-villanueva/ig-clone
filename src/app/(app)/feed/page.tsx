@@ -31,7 +31,7 @@ async function FeedSection() {
   }
 
   return (
-    <div className="space-y-6 max-w-[470px] mx-auto">
+    <div className="space-y-6 max-w-xl w-full mx-auto">
       {feed.posts.map((post) => (
         <PostCard key={post.id} post={post} />
       ))}
@@ -39,20 +39,20 @@ async function FeedSection() {
   );
 }
 
-export default async function Home() {
+export default async function FeedPage() {
   const session = await auth();
   if (!session?.user?.id) {
     redirect("/login");
   }
 
   return (
-    <div className="flex flex-col items-center py-6">
-      <div className="w-full max-w-[470px] px-4 mb-6">
+    <div className="flex flex-col items-center py-6 w-full px-4">
+      <div className="w-full max-w-xl mx-auto mb-6">
         <CreatePostDialog />
       </div>
       <Suspense
         fallback={
-          <div className="space-y-6 max-w-[470px] mx-auto px-4">
+          <div className="space-y-6 max-w-xl w-full mx-auto px-4">
             <FeedSkeleton />
           </div>
         }

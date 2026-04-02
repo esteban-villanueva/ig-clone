@@ -67,8 +67,18 @@ export function ProfileHeader({
         </Avatar>
 
         <div className="flex-1">
-          <div className="flex flex-wrap items-center gap-3 mb-4">
-            <h1 className="text-xl font-light">{user.name ?? "Anonymous"}</h1>
+          <div className="flex flex-wrap items-center gap-4 mb-4">
+            <h1 
+              className="text-2xl md:text-3xl"
+              style={{
+                fontFamily: "var(--font-fraunces), Georgia, serif",
+                fontWeight: 800,
+                letterSpacing: "-0.02em",
+                color: "var(--landing-heading, #111)",
+              }}
+            >
+              {user.name ?? "Anonymous"}
+            </h1>
             {isOwnProfile ? (
               <EditProfileDialog
                 user={user}
@@ -92,18 +102,18 @@ export function ProfileHeader({
           </div>
 
           {/* Stats row */}
-          <div className="flex gap-6 text-sm">
-            <span>
-              <strong>{user._count.posts}</strong>{" "}
-              <span className="text-zinc-500">posts</span>
+          <div className="flex gap-6 text-sm" style={{ color: "var(--landing-body, #444)" }}>
+            <span className="flex flex-col md:flex-row md:gap-1.5 items-start md:items-center">
+              <strong className="text-lg md:text-base" style={{ fontFamily: "var(--font-fraunces), Georgia, serif", fontWeight: 700, color: "var(--landing-heading, #111)" }}>{user._count.posts}</strong>{" "}
+              <span className="text-zinc-500 uppercase tracking-wider text-[10px] md:text-xs font-semibold">posts</span>
             </span>
-            <span>
-              <strong>{user._count.followers}</strong>{" "}
-              <span className="text-zinc-500">followers</span>
+            <span className="flex flex-col md:flex-row md:gap-1.5 items-start md:items-center">
+              <strong className="text-lg md:text-base" style={{ fontFamily: "var(--font-fraunces), Georgia, serif", fontWeight: 700, color: "var(--landing-heading, #111)" }}>{user._count.followers}</strong>{" "}
+              <span className="text-zinc-500 uppercase tracking-wider text-[10px] md:text-xs font-semibold">seguidores</span>
             </span>
-            <span>
-              <strong>{user._count.followings}</strong>{" "}
-              <span className="text-zinc-500">following</span>
+            <span className="flex flex-col md:flex-row md:gap-1.5 items-start md:items-center">
+              <strong className="text-lg md:text-base" style={{ fontFamily: "var(--font-fraunces), Georgia, serif", fontWeight: 700, color: "var(--landing-heading, #111)" }}>{user._count.followings}</strong>{" "}
+              <span className="text-zinc-500 uppercase tracking-wider text-[10px] md:text-xs font-semibold">siguiendo</span>
             </span>
           </div>
         </div>

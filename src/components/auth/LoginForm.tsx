@@ -3,26 +3,22 @@
 import { useState } from "react";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 import Link from "next/link";
 
-export function LoginForm() {
+interface LoginFormProps {
+  onToggleMode?: () => void;
+}
+
+export function LoginForm({ onToggleMode }: LoginFormProps) {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
+  // ─── Logic unchanged ─────────────────────────────────────────────────────
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError(null);
@@ -59,37 +55,90 @@ export function LoginForm() {
       setIsLoading(false);
     }
   };
+  // ─────────────────────────────────────────────────────────────────────────
 
   return (
-    <Card className="w-full max-w-md">
-      <CardHeader className="space-y-1">
-        <CardTitle className="text-2xl font-bold text-center">Log in</CardTitle>
-        <CardDescription className="text-center">
-          Enter your email and password to access your account
-        </CardDescription>
-      </CardHeader>
-      <form onSubmit={handleSubmit}>
-        <CardContent className="space-y-4">
+    <div className="w-full max-w-[420px]">
+      {/* Card */}
+      <div
+        className="rounded-3xl p-8 sm:p-10"
+        style={{
+          background: "rgba(255, 255, 255, 0.82)",
+          backdropFilter: "blur(20px)",
+          WebkitBackdropFilter: "blur(20px)",
+          boxShadow: "0 8px 40px rgba(0,0,0,0.08), 0 0 0 1px rgba(0,0,0,0.05)",
+        }}
+      >
+        {/* Header */}
+        <div className="mb-8 text-center">
+          <h1
+            className="mb-2"
+            style={{
+              fontFamily: "var(--font-fraunces), Georgia, serif",
+              fontSize: "2rem",
+              fontWeight: 800,
+              lineHeight: 1.1,
+              color: "var(--landing-heading)",
+              letterSpacing: "-0.01em",
+            }}
+          >
+            Bienvenido de vuelta
+          </h1>
+          <p
+            className="text-sm"
+            style={{ color: "var(--landing-body)" }}
+          >
+            Ingresá tu email y contraseña para continuar
+          </p>
+        </div>
+
+        <form onSubmit={handleSubmit} className="space-y-5">
+          {/* Error message */}
           {error && (
-            <div className="rounded-md bg-red-50 p-3 text-sm text-red-600 dark:bg-red-900/20 dark:text-red-400">
+            <div
+              className="rounded-xl px-4 py-3 text-sm"
+              style={{
+                background: "rgba(239, 68, 68, 0.08)",
+                border: "1px solid rgba(239, 68, 68, 0.2)",
+                color: "#dc2626",
+              }}
+            >
               {error}
             </div>
           )}
-          <div className="space-y-2">
-            <Label htmlFor="email">Email</Label>
+
+          {/* Email */}
+          <div className="space-y-1.5">
+            <Label
+              htmlFor="email"
+              className="text-xs font-semibold tracking-wide uppercase"
+              style={{ color: "var(--landing-muted)" }}
+            >
+              Email
+            </Label>
             <Input
               id="email"
               type="email"
-              placeholder="you@example.com"
+              placeholder="vos@ejemplo.com"
               autoComplete="email"
               required
               disabled={isLoading}
               value={email}
               onChange={(e) => setEmail(e.target.value)}
+              className="h-11 rounded-xl border-0 bg-white/60 text-sm shadow-sm ring-1 ring-black/10 focus-visible:ring-2 focus-visible:ring-pink-400/60 transition-all placeholder:text-zinc-400"
+              style={{ color: "var(--landing-heading)" }}
             />
           </div>
-          <div className="space-y-2">
-            <Label htmlFor="password">Password</Label>
+
+          {/* Password */}
+          <div className="space-y-1.5">
+            <Label
+              htmlFor="password"
+              className="text-xs font-semibold tracking-wide uppercase"
+              style={{ color: "var(--landing-muted)" }}
+            >
+              Contraseña
+            </Label>
             <Input
               id="password"
               type="password"
@@ -100,21 +149,60 @@ export function LoginForm() {
               disabled={isLoading}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+              className="h-11 rounded-xl border-0 bg-white/60 text-sm shadow-sm ring-1 ring-black/10 focus-visible:ring-2 focus-visible:ring-pink-400/60 transition-all placeholder:text-zinc-400"
+              style={{ color: "var(--landing-heading)" }}
             />
           </div>
-        </CardContent>
-        <CardFooter className="flex flex-col space-y-4">
-          <Button type="submit" className="w-full" disabled={isLoading}>
-            {isLoading ? "Logging in..." : "Log in"}
-          </Button>
-          <p className="text-center text-sm text-muted-foreground">
-            Don&apos;t have an account?{" "}
-            <Link href="/register" className="font-medium text-primary hover:underline">
-              Sign up
+
+          {/* Submit */}
+          <button
+            type="submit"
+            disabled={isLoading}
+            className="
+              w-full h-11 mt-2
+              rounded-xl
+              text-sm font-semibold
+              text-white
+              transition-all duration-200
+              hover:opacity-90 hover:scale-[1.01]
+              active:scale-[0.99]
+              disabled:opacity-50 disabled:cursor-not-allowed disabled:scale-100
+            "
+            style={{
+              background: "linear-gradient(135deg, #F59E0B 0%, #EC4899 50%, #8B5CF6 100%)",
+              boxShadow: "0 4px 16px rgba(236, 72, 153, 0.3)",
+            }}
+          >
+            {isLoading ? "Iniciando sesión..." : "Iniciar sesión"}
+          </button>
+        </form>
+
+        {/* Footer */}
+        <p
+          className="mt-6 text-center text-sm"
+          style={{ color: "var(--landing-muted)" }}
+        >
+          ¿No tenés cuenta?{" "}
+          {onToggleMode ? (
+            <button
+              onClick={onToggleMode}
+              className="hover:opacity-70 transition-opacity font-semibold underline underline-offset-2 disabled:opacity-50"
+              style={{ color: "var(--landing-body)" }}
+              disabled={isLoading}
+            >
+              Registrarse
+            </button>
+          ) : (
+            <Link
+              href="/register"
+              className="font-semibold underline underline-offset-2 hover:opacity-70 transition-opacity"
+              style={{ color: "var(--landing-body)" }}
+            >
+              Registrarse
             </Link>
-          </p>
-        </CardFooter>
-      </form>
-    </Card>
+          )}
+        </p>
+      </div>
+    </div>
   );
 }

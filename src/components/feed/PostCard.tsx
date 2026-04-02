@@ -53,9 +53,9 @@ export function PostCard({ post }: PostCardProps) {
   };
 
   return (
-    <article className="border border-zinc-200 rounded-lg bg-white dark:bg-zinc-950 dark:border-zinc-800">
+    <article className="border border-zinc-100/80 rounded-2xl bg-white shadow-sm dark:bg-zinc-950 dark:border-zinc-800/80 overflow-hidden">
       {/* Header */}
-      <div className="flex items-center gap-3 p-3">
+      <div className="flex items-center gap-3 p-4">
         <Avatar className="h-8 w-8">
           <AvatarImage src={post.author.image ?? undefined} />
           <AvatarFallback className="text-xs">
@@ -68,13 +68,13 @@ export function PostCard({ post }: PostCardProps) {
       </div>
 
       {/* Image */}
-      <div className="relative w-full aspect-square bg-zinc-100 dark:bg-zinc-900">
+      <div className="relative w-full aspect-square bg-zinc-100 dark:bg-zinc-900 border-y border-zinc-100/50 dark:border-zinc-800/50">
         <Image
           src={post.imageUrl}
           alt={post.caption ?? "Post image"}
           fill
           className="object-cover"
-          sizes="(max-width: 768px) 100vw, 470px"
+          sizes="(max-width: 768px) 100vw, 600px"
           priority={false}
         />
       </div>
@@ -145,13 +145,18 @@ export function PostCard({ post }: PostCardProps) {
 
       {/* Comments link */}
       {commentCount > 0 && !showComments && (
-        <div className="px-3 pb-1">
+        <div className="px-4 pb-2 mt-1">
           <button
             type="button"
             onClick={() => setShowComments(true)}
-            className="text-sm text-zinc-500 hover:text-zinc-700 dark:hover:text-zinc-300"
+            className="text-sm font-medium hover:opacity-80 transition-opacity"
+            style={{
+              background: "linear-gradient(135deg, #F59E0B, #EC4899, #8B5CF6)",
+              WebkitBackgroundClip: "text",
+              WebkitTextFillColor: "transparent",
+            }}
           >
-            View all {commentCount} comments
+            Ver {commentCount} comentarios
           </button>
         </div>
       )}
