@@ -8,13 +8,13 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
 }
 
 model User {
   id            String    @id @default(cuid())
   name          String?
   email         String?   @unique
+  password      String?
   emailVerified DateTime?
   image         String?
   createdAt     DateTime  @default(now())
@@ -41,6 +41,8 @@ model Post {
   author   User      @relation(fields: [authorId], references: [id], onDelete: Cascade)
   comments Comment[]
   likes    Like[]
+
+  @@index([authorId, createdAt(sort: Desc)])
 }
 
 model Comment {
@@ -64,6 +66,7 @@ model Like {
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([postId, userId])
+  @@index([postId, createdAt(sort: Desc)])
 }
 
 model Follow {
@@ -76,6 +79,7 @@ model Follow {
   following User @relation("UserFollowings", fields: [followingId], references: [id], onDelete: Cascade)
 
   @@unique([followerId, followingId])
+  @@index([followerId, createdAt(sort: Desc)])
 }
 
 model Account {
