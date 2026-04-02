@@ -17,7 +17,7 @@ const dmSans = DM_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "ig clone · Tu espacio para compartir todo lo que sos",
+  title: "IG clone · Tu espacio para compartir todo lo que sos",
   description:
     "Más que una red social — un espacio donde tus fotos, momentos e historia se conectan con las personas que importan.",
 };

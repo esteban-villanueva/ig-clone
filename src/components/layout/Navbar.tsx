@@ -70,7 +70,7 @@ export function Navbar() {
             <Button
               variant="ghost"
               size="sm"
-              onClick={() => signOut({ callbackUrl: "/login" })}
+              onClick={() => signOut({ callbackUrl: "/" })}
               className="text-sm text-zinc-500 hover:text-zinc-800 hover:bg-zinc-100 rounded-lg px-3 h-8"
             >
               Salir
