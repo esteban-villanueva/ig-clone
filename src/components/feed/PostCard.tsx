@@ -29,22 +29,13 @@ export function PostCard({ post }: PostCardProps) {
     if (isLikePending) return;
     const newLiked = !optimisticLiked;
 
-    addOptimisticLike(newLiked);
     setLikeCount((prev) => (newLiked ? prev + 1 : prev - 1));
 
     startLikeTransition(async () => {
+      addOptimisticLike(newLiked);
       try {
         const result = await toggleLike(post.id);
         setLiked(result.liked);
-        setLikeCount((prev) =>
-          result.liked
-            ? optimisticLiked
-              ? prev
-              : prev + 1
-            : optimisticLiked
-              ? prev - 1
-              : prev
-        );
       } catch {
         setLiked((prev) => !prev);
         setLikeCount((prev) => (newLiked ? prev - 1 : prev + 1));
