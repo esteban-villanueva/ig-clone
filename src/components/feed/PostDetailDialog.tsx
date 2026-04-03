@@ -2,6 +2,7 @@
 
 import { useState, useOptimistic, useTransition, useEffect, useCallback } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -15,6 +16,7 @@ interface CommentItem {
   id: string;
   text: string;
   author: {
+    id?: string;
     name: string | null;
     image: string | null;
   };
@@ -176,15 +178,21 @@ export function PostDetailDialog({ postId, trigger }: PostDetailDialogProps) {
             <div className="flex flex-col w-full md:w-1/2 md:min-w-0">
               {/* Header */}
               <div className="flex items-center gap-3 p-4 border-b border-zinc-200 dark:border-zinc-800">
-                <Avatar className="h-8 w-8">
-                  <AvatarImage src={post.author.image ?? undefined} />
-                  <AvatarFallback className="text-xs">
-                    {getInitials(post.author.name)}
-                  </AvatarFallback>
-                </Avatar>
-                <span className="text-sm font-medium truncate">
+                <Link href={`/profile/${post.author.id}`} onClick={() => setOpen(false)}>
+                  <Avatar className="h-8 w-8">
+                    <AvatarImage src={post.author.image ?? undefined} />
+                    <AvatarFallback className="text-xs">
+                      {getInitials(post.author.name)}
+                    </AvatarFallback>
+                  </Avatar>
+                </Link>
+                <Link
+                  href={`/profile/${post.author.id}`}
+                  className="text-sm font-semibold hover:underline truncate"
+                  onClick={() => setOpen(false)}
+                >
                   {post.author.name ?? "Anonymous"}
-                </span>
+                </Link>
               </div>
 
               {/* Comments section - scrollable */}
@@ -200,9 +208,13 @@ export function PostDetailDialog({ postId, trigger }: PostDetailDialogProps) {
                     </Avatar>
                     <div className="flex-1 min-w-0">
                       <p>
-                        <span className="font-medium">
+                        <Link
+                          href={`/profile/${post.author.id}`}
+                          className="font-bold hover:underline"
+                          onClick={() => setOpen(false)}
+                        >
                           {post.author.name ?? "Anonymous"}
-                        </span>{" "}
+                        </Link>{" "}
                         <span className="break-words">{post.caption}</span>
                       </p>
                       <p className="text-xs text-zinc-500 mt-0.5">
@@ -223,9 +235,19 @@ export function PostDetailDialog({ postId, trigger }: PostDetailDialogProps) {
                     </Avatar>
                     <div className="flex-1 min-w-0">
                       <p>
-                        <span className="font-medium">
-                          {comment.author.name ?? "Anonymous"}
-                        </span>{" "}
+                        {comment.author.id ? (
+                          <Link
+                            href={`/profile/${comment.author.id}`}
+                            className="font-bold hover:underline"
+                            onClick={() => setOpen(false)}
+                          >
+                            {comment.author.name ?? "Anonymous"}
+                          </Link>
+                        ) : (
+                          <span className="font-bold">
+                            {comment.author.name ?? "Anonymous"}
+                          </span>
+                        )}{" "}
                         <span className="break-words">{comment.text}</span>
                       </p>
                       <p className="text-xs text-zinc-500 mt-0.5">

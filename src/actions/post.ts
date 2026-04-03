@@ -23,6 +23,7 @@ export async function getPostDetail(postId: string) {
         include: {
           author: {
             select: {
+              id: true,
               name: true,
               image: true,
             },
@@ -58,6 +59,7 @@ export async function getPostDetail(postId: string) {
       id: c.id,
       text: c.text,
       author: {
+        id: c.author.id,
         name: c.author.name,
         image: c.author.image,
       },

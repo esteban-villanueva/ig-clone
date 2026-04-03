@@ -121,9 +121,11 @@
   * {
     @apply border-border outline-ring/50;
   }
+
   body {
     @apply bg-background text-foreground;
   }
+
   html {
     @apply font-sans;
   }
@@ -161,6 +163,7 @@
     opacity: 0;
     transform: translateY(28px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -172,6 +175,7 @@
     opacity: 0;
     transform: translateX(-40px) rotate(var(--card-rotate));
   }
+
   to {
     opacity: 1;
     transform: translateX(0) rotate(var(--card-rotate));
@@ -183,6 +187,7 @@
     opacity: 0;
     transform: translateX(40px) rotate(var(--card-rotate));
   }
+
   to {
     opacity: 1;
     transform: translateX(0) rotate(var(--card-rotate));
@@ -190,13 +195,25 @@
 }
 
 @keyframes badge-shimmer {
-  0%   { background-position: -200% center; }
-  100% { background-position: 200% center; }
+  0% {
+    background-position: -200% center;
+  }
+
+  100% {
+    background-position: 200% center;
+  }
 }
 
 @keyframes gentle-float {
-  0%, 100% { transform: translateY(0px) rotate(var(--card-rotate)); }
-  50%       { transform: translateY(-8px) rotate(var(--card-rotate)); }
+
+  0%,
+  100% {
+    transform: translateY(0px) rotate(var(--card-rotate));
+  }
+
+  50% {
+    transform: translateY(-8px) rotate(var(--card-rotate));
+  }
 }
 
 /* ─── Landing Utility Classes ────────────────────────────────────────────── */
@@ -242,6 +259,7 @@
   }
 
   @media (prefers-reduced-motion: reduce) {
+
     .animate-fade-up,
     .animate-float-in-left,
     .animate-float-in-right,

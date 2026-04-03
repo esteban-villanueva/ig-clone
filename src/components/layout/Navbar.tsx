@@ -71,7 +71,11 @@ export function Navbar() {
               variant="ghost"
               size="sm"
               onClick={() => signOut({ callbackUrl: "/" })}
-              className="text-sm text-zinc-500 hover:text-zinc-800 hover:bg-zinc-100 rounded-lg px-3 h-8"
+              className="
+              landing-gradient-border
+              px-4 py-2 rounded-full
+              hover:scale-[1.03]
+            "
             >
               Salir
             </Button>
