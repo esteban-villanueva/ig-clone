@@ -61,29 +61,28 @@ export function CreatePostDialog() {
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger
         render={
-          <div className="flex items-center gap-4 bg-white/70 dark:bg-zinc-950/70 p-4 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-sm cursor-pointer hover:bg-white/90 dark:hover:bg-zinc-950/90 transition-all backdrop-blur-md">
-            <div className="flex-1 text-left px-3 py-2 text-zinc-500 font-medium bg-zinc-100/50 dark:bg-zinc-900/50 rounded-xl">
+          <button
+            type="button"
+            className="w-full flex items-center gap-4 bg-white/70 dark:bg-zinc-950/70 p-4 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-sm cursor-pointer hover:bg-white/90 dark:hover:bg-zinc-950/90 transition-all backdrop-blur-md"
+          >
+            <span className="flex-1 text-left px-3 py-2 text-zinc-500 font-medium bg-zinc-100/50 dark:bg-zinc-900/50 rounded-xl">
               ¿Qué estás pensando?
-            </div>
-            <Button
-              size="sm"
-              className="rounded-full shadow-sm"
-              style={{
-                background: "linear-gradient(135deg, #F59E0B, #EC4899)",
-                color: "white"
-              }}
+            </span>
+            <span
+              className="inline-flex items-center rounded-full px-3 py-1.5 text-sm font-medium text-white shadow-sm"
+              style={{ background: "linear-gradient(135deg, #F59E0B, #EC4899)" }}
             >
               Publicar
-            </Button>
-          </div>
+            </span>
+          </button>
         }
       />
       <DialogContent className="sm:max-w-md p-6 sm:p-8 rounded-[2rem] shadow-2xl border border-zinc-100/80 dark:border-zinc-800/80 bg-white/95 dark:bg-zinc-950/95 backdrop-blur-xl">
         <DialogHeader className="mb-4">
-          <DialogTitle 
+          <DialogTitle
             className="text-2xl font-bold"
-            style={{ 
-              fontFamily: "var(--font-fraunces), Georgia, serif", 
+            style={{
+              fontFamily: "var(--font-fraunces), Georgia, serif",
               color: "var(--landing-heading, #111)",
               letterSpacing: "-0.02em"
             }}
@@ -93,7 +92,7 @@ export function CreatePostDialog() {
         </DialogHeader>
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="space-y-3">
-            <label 
+            <label
               className="text-sm font-semibold uppercase tracking-wider text-zinc-500"
               style={{ fontFamily: "var(--font-dm-sans), sans-serif" }}
             >
@@ -107,7 +106,7 @@ export function CreatePostDialog() {
               >
                 <div className="flex flex-col items-center justify-center pt-5 pb-6">
                   <svg className="w-10 h-10 mb-3 text-zinc-300 dark:text-zinc-600" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
-                      <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"/>
+                    <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2" />
                   </svg>
                   <p className="text-sm font-medium text-zinc-600 dark:text-zinc-400">Seleccionar foto</p>
                   <p className="text-xs text-zinc-400 mt-1">PNG, JPG, WEBP hasta 5MB</p>
@@ -135,7 +134,7 @@ export function CreatePostDialog() {
             )}
           </div>
           <div className="space-y-3">
-            <label 
+            <label
               className="text-sm font-semibold uppercase tracking-wider text-zinc-500"
               style={{ fontFamily: "var(--font-dm-sans), sans-serif" }}
             >
@@ -153,14 +152,14 @@ export function CreatePostDialog() {
           {error && (
             <p className="text-sm font-medium text-red-500 bg-red-50 p-3 rounded-xl">{error}</p>
           )}
-          <Button 
-            type="submit" 
-            disabled={isPending || !selectedFile} 
+          <Button
+            type="submit"
+            disabled={isPending || !selectedFile}
             className="w-full h-12 rounded-xl text-base font-semibold transition-all hover:opacity-90 shadow-sm"
-            style={{ 
-              background: "linear-gradient(135deg, #F59E0B, #EC4899, #8B5CF6)", 
-              color: "white", 
-              fontFamily: "var(--font-dm-sans), sans-serif" 
+            style={{
+              background: "linear-gradient(135deg, #F59E0B, #EC4899, #8B5CF6)",
+              color: "white",
+              fontFamily: "var(--font-dm-sans), sans-serif"
             }}
           >
             {isPending ? "Publicando..." : "Publicar ahora"}

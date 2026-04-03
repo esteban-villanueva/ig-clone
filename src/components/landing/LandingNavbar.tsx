@@ -34,7 +34,7 @@ export function LandingNavbar() {
           <span className="flex items-center justify-center w-7 h-7 rounded-lg bg-gradient-to-br from-amber-400 via-pink-500 to-violet-500 text-white text-xs">
             ✦
           </span>
-          <span>ig clone</span>
+          <span>IG</span>
         </Link>
 
         {/* Badge center */}
@@ -46,7 +46,7 @@ export function LandingNavbar() {
         </div> */}
 
         {/* Auth links */}
-        <div className="flex items-center gap-3">
+        {/* <div className="flex items-center gap-3">
           <Link
             href="/login"
             className="text-sm font-medium transition-colors hover:opacity-70"
@@ -69,7 +69,7 @@ export function LandingNavbar() {
           >
             Registrarse
           </Link>
-        </div>
+        </div> */}
       </nav>
     </header>
   );
