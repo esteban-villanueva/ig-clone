@@ -10,7 +10,8 @@ import { Input } from "@/components/ui/input";
 import { getInitials, formatRelativeTime } from "@/lib/utils";
 import { getPostDetail } from "@/actions/post";
 import { toggleLike } from "@/actions/like";
-import { addComment } from "@/actions/comment";
+import { addComment, deleteComment } from "@/actions/comment";
+import { useSession } from "next-auth/react";
 
 interface CommentItem {
   id: string;
@@ -47,6 +48,7 @@ interface PostDetailDialogProps {
 }
 
 export function PostDetailDialog({ postId, trigger }: PostDetailDialogProps) {
+  const { data: session } = useSession();
   const [open, setOpen] = useState(false);
   const [post, setPost] = useState<PostDetailData | null>(null);
   const [loading, setLoading] = useState(false);
@@ -62,10 +64,7 @@ export function PostDetailDialog({ postId, trigger }: PostDetailDialogProps) {
     (_state, newLiked: boolean) => newLiked
   );
 
-  const [optimisticComments, addOptimisticComment] = useOptimistic(
-    comments,
-    (state, newComment: CommentItem) => [...state, newComment]
-  );
+
 
   const fetchPost = useCallback(async () => {
     setLoading(true);
@@ -121,27 +120,35 @@ export function PostDetailDialog({ postId, trigger }: PostDetailDialogProps) {
 
     setCommentText("");
 
-    const optimisticComment: CommentItem = {
-      id: `optimistic-${Date.now()}`,
-      text: trimmed,
-      author: { name: "You", image: null },
-      createdAt: new Date(),
-    };
-
-    addOptimisticComment(optimisticComment);
-    setComments((prev) => [...prev, optimisticComment]);
-
     startCommentTransition(async () => {
-      const result = await addComment(postId, trimmed);
-      if (result.success && result.comment) {
-        setComments((prev) =>
-          prev.filter((c) => c.id !== optimisticComment.id).concat({
-            ...result.comment!,
-            createdAt: new Date(result.comment!.createdAt),
-          })
-        );
-      } else {
-        setComments((prev) => prev.filter((c) => c.id !== optimisticComment.id));
+      try {
+        const result = await addComment(postId, trimmed);
+        if (result.success && result.comment) {
+          setComments((prev) =>
+            prev.concat({
+              ...result.comment!,
+              createdAt: new Date(result.comment!.createdAt),
+            })
+          );
+        }
+      } catch (error) {
+        // Pending state will just finish and re-enable the input
+      }
+    });
+  };
+
+  const handleDeleteComment = async (commentId: string) => {
+    const originalComments = [...comments];
+    setComments((prev) => prev.filter((c) => c.id !== commentId));
+    
+    startCommentTransition(async () => {
+      try {
+        const result = await deleteComment(commentId);
+        if (result?.error) {
+          setComments(originalComments);
+        }
+      } catch {
+        setComments(originalComments);
       }
     });
   };
@@ -158,9 +165,9 @@ export function PostDetailDialog({ postId, trigger }: PostDetailDialogProps) {
             <div className="animate-spin rounded-full h-8 w-8 border-2 border-zinc-300 border-t-zinc-900" />
           </div>
         ) : post ? (
-          <div className="flex flex-col md:flex-row h-[80vh] md:h-[70vh]">
+          <div className="flex flex-col md:flex-row h-[85vh] md:h-[75vh]">
             {/* Left side: Image */}
-            <div className="relative w-full md:w-1/2 bg-black flex items-center justify-center">
+            <div className="relative w-full min-h-[40vh] md:min-h-0 md:h-full md:w-1/2 bg-black flex flex-shrink-0 items-center justify-center">
               <Image
                 src={post.imageUrl}
                 alt={post.caption ?? "Post image"}
@@ -172,7 +179,7 @@ export function PostDetailDialog({ postId, trigger }: PostDetailDialogProps) {
             </div>
 
             {/* Right side: Content */}
-            <div className="flex flex-col w-full md:w-1/2 md:min-w-0">
+            <div className="flex flex-col w-full flex-1 md:w-1/2 md:flex-none md:min-w-0 min-h-0">
               {/* Header */}
               <div className="flex items-center gap-3 p-4 border-b border-zinc-200 dark:border-zinc-800">
                 <Link href={`/profile/${post.author.id}`} onClick={() => setOpen(false)}>
@@ -222,15 +229,15 @@ export function PostDetailDialog({ postId, trigger }: PostDetailDialogProps) {
                 )}
 
                 {/* Comments */}
-                {optimisticComments.map((comment) => (
-                  <div key={comment.id} className="flex items-start gap-2 text-sm">
+                {comments.map((comment) => (
+                  <div key={comment.id} className="flex items-start gap-2 text-sm relative group">
                     <Avatar className="h-6 w-6 flex-shrink-0">
                       <AvatarImage src={comment.author.image ?? undefined} />
                       <AvatarFallback className="text-[10px]">
                         {getInitials(comment.author.name)}
                       </AvatarFallback>
                     </Avatar>
-                    <div className="flex-1 min-w-0">
+                    <div className="flex-1 min-w-0 pr-6">
                       <p>
                         {comment.author.id ? (
                           <Link
@@ -251,6 +258,18 @@ export function PostDetailDialog({ postId, trigger }: PostDetailDialogProps) {
                         {formatRelativeTime(comment.createdAt)}
                       </p>
                     </div>
+
+                    {session?.user?.id === comment.author.id && (
+                      <button
+                        onClick={() => handleDeleteComment(comment.id)}
+                        className="absolute right-0 top-0 text-zinc-400 hover:text-red-500 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity p-1"
+                        aria-label="Delete comment"
+                      >
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                          <path d="M3 6h18" /><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6" /><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2" />
+                        </svg>
+                      </button>
+                    )}
                   </div>
                 ))}
               </div>
