@@ -27,6 +27,12 @@ export function LandingNavbar() {
         {/* Logo */}
         <Link
           href="/"
+          onClick={(e) => {
+            if (window.location.pathname === "/") {
+              e.preventDefault();
+              window.scrollTo({ top: 0, behavior: "smooth" });
+            }
+          }}
           className="flex items-center gap-2 text-base font-bold tracking-tight"
           style={{ color: "var(--landing-heading)" }}
         >

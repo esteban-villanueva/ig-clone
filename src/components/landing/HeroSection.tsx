@@ -26,9 +26,9 @@ export function HeroSection() {
   return (
     <section className="relative flex flex-col items-center justify-center text-center px-6 pt-[var(--landing-section-pt)] pb-20">
       {/* Eyebrow */}
-      <div className="animate-fade-up" style={{ animationDelay: "0.05s" }}>
+      {/*       <div className="animate-fade-up" style={{ animationDelay: "0.05s" }}>
         <EyebrowLabel>✦ Tu espacio. Tu historia. Sin límites.</EyebrowLabel>
-      </div>
+      </div> */}
 
       {/* H1 */}
       <h1
@@ -42,20 +42,8 @@ export function HeroSection() {
         }}
       >
         Tu lugar para{" "}
-        <GradientWord>compartir</GradientWord>
+        <GradientWord>compartir.</GradientWord>
       </h1>
-
-      {/* Subtitle */}
-      {/*       <p
-        className="animate-fade-up mt-6 max-w-md leading-relaxed text-base md:text-lg"
-        style={{
-          color: "var(--landing-body)",
-          animationDelay: "0.25s",
-        }}
-      >
-        Más que una red social — un espacio donde tus fotos, momentos e
-        historia se conectan con las personas que importan.
-      </p> */}
 
       {/* Auth Card Integrated */}
       <div

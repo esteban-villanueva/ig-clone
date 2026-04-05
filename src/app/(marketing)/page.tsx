@@ -23,8 +23,10 @@ export default async function LandingPage() {
         <HeroSection />
       </div>
 
-      {/* Features preview below the fold */}
-      <FeaturesPreview />
+      {/* Features preview below the fold - only on mobile */}
+      <div className="block lg:hidden">
+        <FeaturesPreview />
+      </div>
     </div>
   );
 }

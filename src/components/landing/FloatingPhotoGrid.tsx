@@ -19,7 +19,7 @@ export function FloatingCard({
   return (
     <div
       className={`
-        absolute hidden md:block
+        absolute hidden lg:block
         rounded-2xl overflow-hidden
         shadow-2xl shadow-black/15
         border-4 border-white
