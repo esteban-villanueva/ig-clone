@@ -42,7 +42,7 @@ async function FeedSection() {
 export default async function FeedPage() {
   const session = await auth();
   if (!session?.user?.id) {
-    redirect("/login");
+    redirect("/");
   }
 
   return (
