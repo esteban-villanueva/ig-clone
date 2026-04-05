@@ -44,12 +44,18 @@ interface PostDetailData {
 
 interface PostDetailDialogProps {
   postId: string;
-  trigger: React.ReactNode;
+  trigger?: React.ReactNode;
+  open?: boolean;
+  onOpenChange?: (open: boolean) => void;
 }
 
-export function PostDetailDialog({ postId, trigger }: PostDetailDialogProps) {
+export function PostDetailDialog({ postId, trigger, open: controlledOpen, onOpenChange: setControlledOpen }: PostDetailDialogProps) {
   const { data: session } = useSession();
-  const [open, setOpen] = useState(false);
+  const [internalOpen, setInternalOpen] = useState(false);
+  
+  const open = controlledOpen !== undefined ? controlledOpen : internalOpen;
+  const setOpen = setControlledOpen || setInternalOpen;
+
   const [post, setPost] = useState<PostDetailData | null>(null);
   const [loading, setLoading] = useState(false);
   const [liked, setLiked] = useState(false);
@@ -155,7 +161,7 @@ export function PostDetailDialog({ postId, trigger }: PostDetailDialogProps) {
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <div onClick={() => setOpen(true)}>{trigger}</div>
+      {trigger && <div onClick={() => setOpen(true)}>{trigger}</div>}
       <DialogContent
         showCloseButton
         className="max-w-[calc(100%-2rem)] sm:max-w-4xl p-0 overflow-hidden"

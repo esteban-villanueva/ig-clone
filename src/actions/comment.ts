@@ -3,6 +3,7 @@
 import { auth } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { revalidatePath } from "next/cache";
+import { pusherServer } from "@/lib/pusher";
 
 export async function addComment(postId: string, text: string) {
   const session = await auth();
@@ -35,6 +36,32 @@ export async function addComment(postId: string, text: string) {
         },
       },
     });
+
+    const post = await db.post.findUnique({
+      where: { id: postId },
+      select: { authorId: true }
+    });
+
+    if (post && post.authorId !== session.user.id) {
+      const notification = await db.notification.create({
+        data: {
+          type: "COMMENT",
+          issuerId: session.user.id,
+          recipientId: post.authorId,
+          postId,
+        },
+        include: {
+          issuer: { select: { id: true, name: true, image: true } },
+          post: { select: { id: true, imageUrl: true } },
+        }
+      });
+
+      try {
+        await pusherServer.trigger(`private-${post.authorId}`, 'new:notification', notification);
+      } catch (error) {
+        console.error("Pusher trigger error:", error);
+      }
+    }
 
     revalidatePath("/");
     return {

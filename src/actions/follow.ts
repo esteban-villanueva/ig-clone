@@ -3,6 +3,7 @@
 import { auth } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { revalidatePath } from "next/cache";
+import { pusherServer } from "@/lib/pusher";
 
 export async function toggleFollow(
   targetUserId: string
@@ -46,6 +47,26 @@ export async function toggleFollow(
       followingId: targetUserId,
     },
   });
+
+  // TargetUserId != followerId Ya ha sido verificado arriba, pero por si acaso.
+  if (followerId !== targetUserId) {
+    const notification = await db.notification.create({
+      data: {
+        type: "FOLLOW",
+        issuerId: followerId,
+        recipientId: targetUserId,
+      },
+      include: {
+        issuer: { select: { id: true, name: true, image: true } },
+      }
+    });
+
+    try {
+      await pusherServer.trigger(`private-${targetUserId}`, 'new:notification', notification);
+    } catch (error) {
+      console.error("Pusher trigger error:", error);
+    }
+  }
 
   revalidatePath("/profile/[id]");
   return { following: true };

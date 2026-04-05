@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { getInitials } from "@/lib/utils";
 import { SearchBar } from "@/components/layout/SearchBar";
+import { NotificationsDropdown } from "@/components/layout/NotificationsDropdown";
 
 export function Navbar() {
   const { data: session, status } = useSession();
@@ -54,6 +55,7 @@ export function Navbar() {
           <div className="h-8 w-20 animate-pulse rounded-lg bg-zinc-100 shrink-0" />
         ) : session ? (
           <div className="flex items-center gap-3 shrink-0">
+            <NotificationsDropdown userId={session.user.id} />
             <Link href={`/profile/${session.user.id}`}>
               <Avatar className="h-8 w-8 cursor-pointer ring-2 ring-transparent hover:ring-pink-300 transition-all">
                 <AvatarImage src={session.user?.image ?? undefined} />
