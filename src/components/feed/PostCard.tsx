@@ -43,6 +43,8 @@ export function PostCard({ post }: PostCardProps) {
     });
   };
 
+  const [aspectRatio, setAspectRatio] = useState(1);
+
   return (
     <article className="border border-zinc-100/80 rounded-2xl bg-white shadow-sm dark:bg-zinc-950 dark:border-zinc-800/80 overflow-hidden">
       {/* Header */}
@@ -67,7 +69,10 @@ export function PostCard({ post }: PostCardProps) {
       <PostDetailDialog
         postId={post.id}
         trigger={
-          <div className="relative w-full aspect-square bg-zinc-100 dark:bg-zinc-900 border-y border-zinc-100/50 dark:border-zinc-800/50 cursor-pointer">
+          <div 
+            className="relative w-full bg-zinc-100 dark:bg-zinc-900 border-y border-zinc-100/50 dark:border-zinc-800/50 cursor-pointer overflow-hidden transition-[aspect-ratio] duration-500 ease-in-out"
+            style={{ aspectRatio: `${Math.min(1.91, Math.max(0.5625, aspectRatio))}` }}
+          >
             <Image
               src={post.imageUrl}
               alt={post.caption ?? "Post image"}
@@ -75,6 +80,12 @@ export function PostCard({ post }: PostCardProps) {
               className="object-cover"
               sizes="(max-width: 768px) 100vw, 600px"
               priority={false}
+              onLoad={(e) => {
+                const img = e.target as HTMLImageElement;
+                if (img.naturalWidth && img.naturalHeight) {
+                  setAspectRatio(img.naturalWidth / img.naturalHeight);
+                }
+              }}
             />
           </div>
         }
