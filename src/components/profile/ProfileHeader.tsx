@@ -16,6 +16,8 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { Settings, Camera, User2 } from "lucide-react";
 import { getInitials } from "@/lib/utils";
 
 interface ProfileHeaderProps {
@@ -23,6 +25,7 @@ interface ProfileHeaderProps {
     id: string;
     name: string | null;
     image: string | null;
+    bio?: string | null;
     _count: {
       posts: number;
       followers: number;
@@ -68,7 +71,7 @@ export function ProfileHeader({
 
         <div className="flex-1">
           <div className="flex flex-wrap items-center gap-4 mb-4">
-            <h1 
+            <h1
               className="text-2xl md:text-3xl"
               style={{
                 fontFamily: "var(--font-fraunces), Georgia, serif",
@@ -116,6 +119,15 @@ export function ProfileHeader({
               <span className="text-zinc-500 uppercase tracking-wider text-[10px] md:text-xs font-semibold">siguiendo</span>
             </span>
           </div>
+
+          {/* Bio display */}
+          {user.bio && (
+            <div className="mt-4 max-w-md">
+              <p className="text-sm leading-relaxed text-zinc-600 whitespace-pre-wrap">
+                {user.bio}
+              </p>
+            </div>
+          )}
         </div>
       </div>
     </div>
@@ -127,7 +139,7 @@ function EditProfileDialog({
   open,
   onOpenChange,
 }: {
-  user: { id: string; name: string | null; image: string | null };
+  user: { id: string; name: string | null; image: string | null; bio?: string | null };
   open: boolean;
   onOpenChange: (open: boolean) => void;
 }) {
@@ -165,56 +177,119 @@ function EditProfileDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogTrigger render={<Button variant="outline" size="sm" />}>
-        Edit Profile
+      <DialogTrigger
+        render={
+          <button
+            type="button"
+            className="flex items-center justify-center p-2 rounded-full text-zinc-500 hover:text-zinc-900 bg-black/5 hover:bg-black/10 border border-white/30 shadow-sm transition-all duration-300 backdrop-blur-sm"
+            title="Settings"
+          />
+        }
+      >
+        <Settings className="w-4 h-4 text-zinc-500" />
       </DialogTrigger>
-      <DialogContent>
-        <form onSubmit={handleSubmit}>
-          <DialogHeader>
-            <DialogTitle>Edit Profile</DialogTitle>
-            <DialogDescription>
-              Update your name and profile picture.
+      <DialogContent
+        className="overflow-hidden border-none p-0 max-w-sm"
+        style={{
+          background: "rgba(255, 255, 255, 0.75)",
+          backdropFilter: "blur(24px) saturate(180%)",
+          WebkitBackdropFilter: "blur(24px) saturate(180%)",
+        }}
+      >
+        <form onSubmit={handleSubmit} className="flex flex-col h-full">
+          {/* Header con gradiente suave */}
+          <div className="relative pt-8 pb-6 px-6 text-center border-b border-black/5">
+            <div className="absolute top-0 left-0 w-full h-1" style={{ background: "linear-gradient(90deg, #F59E0B, #EC4899, #8B5CF6)" }}></div>
+            <DialogTitle
+              className="text-2xl"
+              style={{
+                fontFamily: "var(--font-fraunces), Georgia, serif",
+                fontWeight: 800,
+                letterSpacing: "-0.02em",
+                color: "var(--landing-heading, #111)",
+              }}
+            >
+              Edit Profile
+            </DialogTitle>
+            <DialogDescription className="mt-1 text-zinc-500 text-xs font-medium uppercase tracking-wider">
+              Update your presence
             </DialogDescription>
-          </DialogHeader>
-          <div className="space-y-4 py-4">
-            <div>
-              <Label htmlFor="edit-name">Name</Label>
+          </div>
+
+          <div className="flex-1 px-8 py-8 space-y-8 overflow-y-auto max-h-[60vh]">
+            {/* Avatar Section */}
+            <div className="flex flex-col items-center gap-1">
+              <Label className="text-[10px] uppercase font-bold tracking-[0.15em] text-zinc-400 mb-2">Profile Image</Label>
+              <div
+                className="relative group cursor-pointer"
+                onClick={() => document.getElementById("edit-image")?.click()}
+              >
+                <div className="absolute -inset-1.5 bg-gradient-to-tr from-amber-500 via-pink-500 to-violet-500 rounded-full opacity-30 group-hover:opacity-60 blur-[6px] transition-opacity duration-300"></div>
+                <Avatar className="h-24 w-24 border-2 border-white ring-2 ring-black/5 shadow-2xl relative z-10 transition-transform duration-500 group-hover:scale-[1.02]">
+                  <AvatarImage src={preview || user.image || undefined} />
+                  <AvatarFallback className="bg-zinc-100">
+                    <User2 className="w-8 h-8 text-zinc-300" />
+                  </AvatarFallback>
+                </Avatar>
+
+                <div className="absolute inset-0 z-20 flex flex-col items-center justify-center bg-black/40 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                  <Camera className="w-5 h-5 mb-1" />
+                  <span className="text-[9px] font-bold uppercase tracking-widest">Change</span>
+                </div>
+
+                <Input
+                  id="edit-image"
+                  name="image"
+                  type="file"
+                  accept="image/*"
+                  onChange={handleFileChange}
+                  className="hidden"
+                />
+              </div>
+            </div>
+
+            {/* Name Field */}
+            <div className="space-y-2">
+              <Label htmlFor="edit-name" className="text-[10px] uppercase font-bold tracking-[0.15em] text-zinc-400 ml-1">Full Name</Label>
               <Input
                 id="edit-name"
                 name="name"
                 defaultValue={user.name ?? ""}
                 required
+                className="h-11 bg-white/40 border-black/5 focus:bg-white/60 focus:border-pink-500/30 focus:ring-pink-500/5 transition-all text-sm font-medium rounded-xl"
+                placeholder="How do you want to be seen?"
               />
             </div>
-            <div>
-              <Label htmlFor="edit-image">Profile Picture</Label>
-              <Input
-                id="edit-image"
-                name="image"
-                type="file"
-                accept="image/*"
-                onChange={handleFileChange}
+
+            {/* Bio Field */}
+            <div className="space-y-2">
+              <Label htmlFor="edit-bio" className="text-[10px] uppercase font-bold tracking-[0.15em] text-zinc-400 ml-1">About You</Label>
+              <Textarea
+                id="edit-bio"
+                name="bio"
+                defaultValue={user.bio ?? ""}
+                className="min-h-24 bg-white/40 border-black/5 focus:bg-white/60 focus:border-violet-500/30 focus:ring-violet-500/5 transition-all text-sm leading-relaxed rounded-xl py-3"
+                placeholder="Tell the world your story..."
               />
-              {preview && (
-                <img
-                  src={preview}
-                  alt="Preview"
-                  className="mt-2 h-20 w-20 rounded-full object-cover"
-                />
-              )}
             </div>
           </div>
-          <DialogFooter>
-            <Button
+
+          <DialogFooter className="flex flex-row items-center justify-center sm:justify-center gap-3 p-8 border-t border-black/5 bg-gradient-to-b from-transparent to-black/[0.02] mx-0 mb-0">
+            <button
               type="button"
-              variant="outline"
               onClick={() => onOpenChange(false)}
+              className="flex-1 max-w-[140px] py-2.5 rounded-full text-[10px] font-bold uppercase tracking-[0.2em] text-zinc-400 hover:text-zinc-900 hover:bg-black/5 transition-all duration-300 border border-black/5 shadow-sm"
             >
               Cancel
-            </Button>
-            <Button type="submit" disabled={isPending}>
-              {isPending ? "Saving..." : "Save"}
-            </Button>
+            </button>
+            <button 
+              type="submit" 
+              disabled={isPending}
+              className="flex-1 max-w-[140px] py-2.5 rounded-full text-[10px] font-bold uppercase tracking-[0.2em] text-white transition-all duration-300 hover:scale-[1.03] hover:shadow-lg active:scale-95 disabled:opacity-50 disabled:scale-100 shadow-md shadow-pink-500/20"
+              style={{ background: "linear-gradient(135deg, #F59E0B, #EC4899, #8B5CF6)" }}
+            >
+              {isPending ? "Sync..." : "Save"}
+            </button>
           </DialogFooter>
         </form>
       </DialogContent>

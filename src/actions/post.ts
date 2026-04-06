@@ -106,3 +106,38 @@ export async function createPost(formData: FormData) {
     return { error: "Failed to create post. Please try again." };
   }
 }
+
+export async function deletePost(postId: string) {
+  const session = await auth();
+  if (!session?.user?.id) {
+    return { error: "You must be logged in to delete a post" };
+  }
+
+  try {
+    const post = await db.post.findUnique({
+      where: { id: postId },
+      select: { authorId: true },
+    });
+
+    if (!post) {
+      return { error: "Post not found" };
+    }
+
+    if (post.authorId !== session.user.id) {
+      return { error: "You are not authorized to delete this post" };
+    }
+
+    await db.post.delete({
+      where: { id: postId },
+    });
+
+    revalidatePath("/");
+    revalidatePath(`/profile/${session.user.id}`);
+
+    return { success: true };
+  } catch (error) {
+    console.error("Failed to delete post:", error);
+    return { error: "Failed to delete post. Please try again." };
+  }
+}
+

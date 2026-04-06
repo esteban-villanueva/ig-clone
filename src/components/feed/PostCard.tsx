@@ -8,6 +8,10 @@ import { toggleLike } from "@/actions/like";
 import { PostDetailDialog } from "@/components/feed/PostDetailDialog";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { getInitials, formatRelativeTime } from "@/lib/utils";
+import { useSession } from "next-auth/react";
+import { deletePost } from "@/actions/post";
+import { MoreHorizontal, Trash2 } from "lucide-react";
+import { DeletePostConfirmDialog } from "@/components/feed/DeletePostConfirmDialog";
 
 interface PostCardProps {
   post: FeedPost;
@@ -19,6 +23,29 @@ export function PostCard({ post }: PostCardProps) {
   const [isLikePending, startLikeTransition] = useTransition();
 
   const [commentCount] = useState(post._count.comments);
+  const { data: session } = useSession();
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [isDeleted, setIsDeleted] = useState(false);
+  const [isConfirmOpen, setIsConfirmOpen] = useState(false);
+
+  const handleDelete = async () => {
+    setIsConfirmOpen(false);
+    setIsDeleting(true);
+    try {
+      const result = await deletePost(post.id);
+      if (result.success) {
+        setIsDeleted(true);
+      } else {
+        alert(result.error);
+        setIsDeleting(false);
+      }
+    } catch (error) {
+      alert("Error al eliminar el post");
+      setIsDeleting(false);
+    }
+  };
+
+  if (isDeleted) return null;
 
   const [optimisticLiked, addOptimisticLike] = useOptimistic(
     liked,
@@ -63,13 +90,32 @@ export function PostCard({ post }: PostCardProps) {
         >
           {post.author.name ?? "Anonymous"}
         </Link>
+        {session?.user?.id === post.author.id && (
+          <div className="ml-auto">
+            <button
+              onClick={() => setIsConfirmOpen(true)}
+              disabled={isDeleting}
+              className="p-2 text-zinc-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-950/30 rounded-full transition-all disabled:opacity-50"
+              aria-label="Delete post"
+            >
+              <Trash2 className="h-4 w-4" />
+            </button>
+          </div>
+        )}
       </div>
+
+      <DeletePostConfirmDialog
+        isOpen={isConfirmOpen}
+        onClose={() => setIsConfirmOpen(false)}
+        onConfirm={handleDelete}
+        isDeleting={isDeleting}
+      />
 
       {/* Image — opens PostDetailDialog */}
       <PostDetailDialog
         postId={post.id}
         trigger={
-          <div 
+          <div
             className="relative w-full bg-zinc-100 dark:bg-zinc-900 border-y border-zinc-100/50 dark:border-zinc-800/50 cursor-pointer overflow-hidden transition-[aspect-ratio] duration-500 ease-in-out"
             style={{ aspectRatio: `${Math.min(1.91, Math.max(0.5625, aspectRatio))}` }}
           >

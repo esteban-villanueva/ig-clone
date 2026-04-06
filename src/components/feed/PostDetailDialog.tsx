@@ -8,10 +8,12 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { getInitials, formatRelativeTime } from "@/lib/utils";
-import { getPostDetail } from "@/actions/post";
+import { getPostDetail, deletePost } from "@/actions/post";
+import { MoreHorizontal, Trash2 } from "lucide-react";
 import { toggleLike } from "@/actions/like";
 import { addComment, deleteComment } from "@/actions/comment";
 import { useSession } from "next-auth/react";
+import { DeletePostConfirmDialog } from "@/components/feed/DeletePostConfirmDialog";
 
 interface CommentItem {
   id: string;
@@ -52,7 +54,7 @@ interface PostDetailDialogProps {
 export function PostDetailDialog({ postId, trigger, open: controlledOpen, onOpenChange: setControlledOpen }: PostDetailDialogProps) {
   const { data: session } = useSession();
   const [internalOpen, setInternalOpen] = useState(false);
-  
+
   const open = controlledOpen !== undefined ? controlledOpen : internalOpen;
   const setOpen = setControlledOpen || setInternalOpen;
 
@@ -146,7 +148,7 @@ export function PostDetailDialog({ postId, trigger, open: controlledOpen, onOpen
   const handleDeleteComment = async (commentId: string) => {
     const originalComments = [...comments];
     setComments((prev) => prev.filter((c) => c.id !== commentId));
-    
+
     startCommentTransition(async () => {
       try {
         const result = await deleteComment(commentId);
@@ -159,11 +161,31 @@ export function PostDetailDialog({ postId, trigger, open: controlledOpen, onOpen
     });
   };
 
+  const [isDeletingPost, setIsDeletingPost] = useState(false);
+  const [isConfirmOpen, setIsConfirmOpen] = useState(false);
+
+  const handleDeletePost = async () => {
+    setIsConfirmOpen(false);
+    setIsDeletingPost(true);
+    try {
+      const result = await deletePost(postId);
+      if (result.success) {
+        setOpen(false);
+      } else {
+        alert(result.error);
+        setIsDeletingPost(false);
+      }
+    } catch (error) {
+      alert("Error al eliminar el post");
+      setIsDeletingPost(false);
+    }
+  };
+
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       {trigger && <div onClick={() => setOpen(true)}>{trigger}</div>}
       <DialogContent
-        showCloseButton
+        showCloseButton={false}
         className="max-w-[calc(100%-2rem)] sm:max-w-4xl p-0 overflow-hidden"
       >
         {loading ? (
@@ -203,7 +225,26 @@ export function PostDetailDialog({ postId, trigger, open: controlledOpen, onOpen
                 >
                   {post.author.name ?? "Anonymous"}
                 </Link>
+                {session?.user?.id === post.author.id && (
+                  <div className="ml-auto">
+                    <button
+                      onClick={() => setIsConfirmOpen(true)}
+                      disabled={isDeletingPost}
+                      className="p-2 text-zinc-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-950/30 rounded-full transition-all disabled:opacity-50"
+                      aria-label="Delete post"
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </button>
+                  </div>
+                )}
               </div>
+
+              <DeletePostConfirmDialog
+                isOpen={isConfirmOpen}
+                onClose={() => setIsConfirmOpen(false)}
+                onConfirm={handleDeletePost}
+                isDeleting={isDeletingPost}
+              />
 
               {/* Comments section - scrollable */}
               <div className="flex-1 overflow-y-auto p-4 space-y-3">

@@ -22,6 +22,7 @@ export default async function ProfilePage({ params }: PageProps) {
       id: true,
       name: true,
       image: true,
+      bio: true,
       _count: {
         select: {
           posts: true,
