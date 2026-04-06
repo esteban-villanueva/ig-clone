@@ -90,7 +90,7 @@ export function NotificationsDropdown({ userId }: NotificationsDropdownProps) {
   const handleDelete = async (e: React.MouseEvent, notifId: string) => {
     e.preventDefault();
     e.stopPropagation();
-    
+
     // Optimistic UI delete
     setNotifications((prev) => prev.filter((n) => n.id !== notifId));
     await deleteNotification(notifId);
@@ -121,10 +121,10 @@ export function NotificationsDropdown({ userId }: NotificationsDropdownProps) {
         </button>
 
         {isOpen && (
-          <div 
-            className="absolute left-0 mt-2 w-80 bg-white/90 backdrop-blur-xl border border-zinc-200/50 shadow-2xl rounded-2xl overflow-hidden z-50 transform origin-top-left transition-all animate-in fade-in slide-in-from-top-2"
+          <div
+            className="fixed inset-x-4 top-24 mx-auto max-w-[calc(100vw-2rem)] md:absolute md:left-0 md:inset-x-auto md:top-full md:mt-2 md:w-80 bg-white/95 backdrop-blur-xl border border-zinc-200/50 shadow-2xl rounded-2xl overflow-hidden z-50 transform origin-top md:origin-top-left transition-all animate-in fade-in slide-in-from-top-2"
             style={{
-              boxShadow: "0 10px 40px -10px rgba(0,0,0,0.1), 0 0 0 1px rgba(0,0,0,0.05)"
+              boxShadow: "0 20px 50px -12px rgba(0,0,0,0.15), 0 0 0 1px rgba(0,0,0,0.05)"
             }}
           >
             <div className="px-4 py-3 border-b border-zinc-100 bg-white/50">
@@ -132,7 +132,7 @@ export function NotificationsDropdown({ userId }: NotificationsDropdownProps) {
                 Notificaciones
               </h3>
             </div>
-            
+
             <div className="max-h-[400px] overflow-y-auto scrollbar-thin">
               {notifications.length === 0 ? (
                 <div className="p-6 text-center text-sm text-zinc-500">
@@ -152,7 +152,7 @@ export function NotificationsDropdown({ userId }: NotificationsDropdownProps) {
                           {getInitials(notif.issuer?.name)}
                         </AvatarFallback>
                       </Avatar>
-                      
+
                       <div className="flex-1 text-sm text-zinc-700 leading-snug pt-0.5 pr-6">
                         {getNotificationText(notif.type, notif.issuer?.name || "Alguien")}
                         {/* Fecha simulada */}
@@ -164,9 +164,9 @@ export function NotificationsDropdown({ userId }: NotificationsDropdownProps) {
                       {notif.post?.imageUrl && (
                         <div className="w-10 h-10 shrink-0 rounded-md overflow-hidden bg-zinc-100">
                           {/* eslint-disable-next-line @next/next/no-img-element */}
-                          <img 
-                            src={notif.post.imageUrl} 
-                            alt="Post thumbnail" 
+                          <img
+                            src={notif.post.imageUrl}
+                            alt="Post thumbnail"
                             className="w-full h-full object-cover"
                           />
                         </div>
