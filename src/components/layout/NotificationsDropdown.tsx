@@ -122,7 +122,7 @@ export function NotificationsDropdown({ userId }: NotificationsDropdownProps) {
 
         {isOpen && (
           <div 
-            className="absolute right-0 mt-2 w-80 bg-white/90 backdrop-blur-xl border border-zinc-200/50 shadow-2xl rounded-2xl overflow-hidden z-50 transform origin-top-right transition-all animate-in fade-in slide-in-from-top-2"
+            className="absolute left-0 mt-2 w-80 bg-white/90 backdrop-blur-xl border border-zinc-200/50 shadow-2xl rounded-2xl overflow-hidden z-50 transform origin-top-left transition-all animate-in fade-in slide-in-from-top-2"
             style={{
               boxShadow: "0 10px 40px -10px rgba(0,0,0,0.1), 0 0 0 1px rgba(0,0,0,0.05)"
             }}

@@ -86,7 +86,7 @@ export function SearchBar() {
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           onFocus={() => query.length >= 2 && setIsOpen(true)}
-          className="h-9 w-52 rounded-md border border-input bg-background pl-9 pr-3 text-sm shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+          className="h-9 w-full rounded-full border border-black/5 bg-black/5 pl-9 pr-3 text-sm shadow-[inset_0_2px_4px_rgba(0,0,0,0.02)] placeholder:text-zinc-500 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-pink-400 transition-all"
         />
       </div>
 
