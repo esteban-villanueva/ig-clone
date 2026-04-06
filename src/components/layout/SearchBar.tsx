@@ -91,7 +91,7 @@ export function SearchBar() {
       </div>
 
       {showDropdown && (
-        <div className="absolute right-0 top-full z-50 mt-1 w-72 rounded-md border bg-popover p-1 shadow-md">
+        <div className="fixed inset-x-4 top-17 mx-auto max-w-[calc(100vw-2rem)] md:absolute md:inset-x-auto md:left-0 md:top-full md:mt-2 md:w-80 rounded-2xl border bg-white/95 backdrop-blur-xl p-1 shadow-2xl z-50 transform origin-top md:origin-top-left transition-all animate-in fade-in slide-in-from-top-2">
           {isLoading ? (
             <div className="flex items-center justify-center py-6 text-sm text-muted-foreground">
               Searching…

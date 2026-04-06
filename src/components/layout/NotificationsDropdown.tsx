@@ -122,7 +122,7 @@ export function NotificationsDropdown({ userId }: NotificationsDropdownProps) {
 
         {isOpen && (
           <div
-            className="fixed inset-x-4 top-24 mx-auto max-w-[calc(100vw-2rem)] md:absolute md:left-0 md:inset-x-auto md:top-full md:mt-2 md:w-80 bg-white/95 backdrop-blur-xl border border-zinc-200/50 shadow-2xl rounded-2xl overflow-hidden z-50 transform origin-top md:origin-top-left transition-all animate-in fade-in slide-in-from-top-2"
+            className="fixed inset-x-4 top-17 mx-auto max-w-[calc(100vw-2rem)] md:absolute md:left-0 md:inset-x-auto md:top-full md:mt-2 md:w-80 bg-white/95 backdrop-blur-xl border border-zinc-200/50 shadow-2xl rounded-2xl overflow-hidden z-50 transform origin-top md:origin-top-left transition-all animate-in fade-in slide-in-from-top-2"
             style={{
               boxShadow: "0 20px 50px -12px rgba(0,0,0,0.15), 0 0 0 1px rgba(0,0,0,0.05)"
             }}
