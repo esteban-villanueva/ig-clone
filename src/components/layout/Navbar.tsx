@@ -12,16 +12,16 @@ export function Navbar() {
   const { data: session, status } = useSession();
 
   return (
-    <div className="sticky top-4 z-40 mx-auto w-full px-4 sm:px-6 max-w-5xl">
-      <nav
-        className="w-full rounded-[2rem] border shadow-[0_8px_32px_rgba(0,0,0,0.04)] transition-all duration-300"
-        style={{
-          background: "rgba(255, 255, 255, 0.65)",
-          backdropFilter: "blur(24px)",
-          WebkitBackdropFilter: "blur(24px)",
-          borderColor: "rgba(255, 255, 255, 0.6)",
-        }}
-      >
+    <div 
+      className="sticky top-0 z-40 w-full border-b transition-all duration-300"
+      style={{
+        background: "rgba(255, 255, 255, 0.8)",
+        backdropFilter: "blur(24px)",
+        WebkitBackdropFilter: "blur(24px)",
+        borderColor: "rgba(0, 0, 0, 0.06)",
+      }}
+    >
+      <nav className="mx-auto w-full max-w-5xl">
         <div className="flex h-16 items-center justify-between px-4 sm:px-6 gap-4 sm:gap-6 relative">
           {/* Lado izquierdo: Logo + Search */}
           <div className="flex items-center gap-3 sm:gap-4 md:gap-6 flex-1">
