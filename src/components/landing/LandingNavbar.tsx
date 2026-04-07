@@ -16,6 +16,7 @@ export function LandingNavbar() {
     <header
       className={`
         fixed top-0 left-0 right-0 z-50
+        lg:hidden
         transition-all duration-300 ease-in-out
         ${scrolled
           ? "bg-white/80 backdrop-blur-md border-b border-black/5 shadow-sm"
@@ -33,14 +34,15 @@ export function LandingNavbar() {
               window.scrollTo({ top: 0, behavior: "smooth" });
             }
           }}
-          className="flex items-center gap-2 text-base font-bold tracking-tight"
-          style={{ color: "var(--landing-heading)" }}
+          className="flex items-center gap-2 group transition-all duration-300"
         >
-          {/* Simple camera icon as logo mark */}
-          <span className="flex items-center justify-center w-7 h-7 rounded-lg bg-gradient-to-br from-amber-400 via-pink-500 to-violet-500 text-white text-xs">
-            ✦
-          </span>
-          <span>IG</span>
+          <div className="relative w-9 h-9">
+            <img
+              src="/logo.png"
+              alt="Logo"
+              className="w-full h-full object-contain filter drop-shadow-sm group-hover:scale-110 transition-transform duration-300"
+            />
+          </div>
         </Link>
 
         {/* Badge center */}

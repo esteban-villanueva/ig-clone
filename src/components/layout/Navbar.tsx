@@ -27,17 +27,16 @@ export function Navbar() {
           <div className="flex items-center gap-3 sm:gap-4 md:gap-6 flex-1">
             <Link
               href="/feed"
-              className="flex items-center shrink-0 group z-10"
+              className="flex items-center shrink-0 group z-10 p-1"
               title="Ir al inicio"
             >
-              <span
-                className="flex items-center justify-center w-9 h-9 sm:w-10 sm:h-10 rounded-xl text-white text-base shadow-[0_0_15px_rgba(236,72,153,0.3)] group-hover:shadow-[0_0_20px_rgba(236,72,153,0.5)] transition-all duration-500 ease-out group-hover:scale-105"
-                style={{
-                  background: "linear-gradient(135deg, #F59E0B, #EC4899, #8B5CF6)",
-                }}
-              >
-                ✦
-              </span>
+              <div className="relative w-10 h-10 transition-transform duration-300 ease-out group-hover:scale-105">
+                <img 
+                  src="/logo.png" 
+                  alt="ADN Lab Logo" 
+                  className="w-full h-full object-contain filter drop-shadow-sm" 
+                />
+              </div>
             </Link>
 
             {/* Search */}

@@ -2,10 +2,11 @@
 
 import { useState, useOptimistic, useTransition } from "react";
 import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 import { toggleFollow } from "@/actions/follow";
 import { updateProfile } from "@/actions/profile";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
+
 import {
   Dialog,
   DialogContent,
@@ -147,6 +148,7 @@ function EditProfileDialog({
   onOpenChange: (open: boolean) => void;
 }) {
   const { update } = useSession();
+  const router = useRouter();
   const [isPending, startTransition] = useTransition();
   const [preview, setPreview] = useState<string | null>(null);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
@@ -169,6 +171,10 @@ function EditProfileDialog({
           name: formData.get("name"),
           image: result.imageUrl || user.image,
         });
+
+        // Force server re-render for profile page data
+        router.refresh();
+
         setPreview(null);
         setSelectedFile(null);
         setError(null);
@@ -302,8 +308,8 @@ function EditProfileDialog({
             >
               Cancel
             </button>
-            <button 
-              type="submit" 
+            <button
+              type="submit"
               disabled={isPending}
               className="flex-1 max-w-[140px] py-2.5 rounded-full text-[10px] font-bold uppercase tracking-[0.2em] text-white transition-all duration-300 hover:scale-[1.03] hover:shadow-lg active:scale-95 disabled:opacity-50 disabled:scale-100 shadow-md shadow-pink-500/20"
               style={{ background: "linear-gradient(135deg, #F59E0B, #EC4899, #8B5CF6)" }}

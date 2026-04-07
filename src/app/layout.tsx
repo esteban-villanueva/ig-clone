@@ -19,7 +19,7 @@ const dmSans = DM_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "Ig Clone",
+  title: "Ig Clons",
   description: "A minimal Instagram clone built with Next.js",
 };
 
