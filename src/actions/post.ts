@@ -132,6 +132,7 @@ export async function deletePost(postId: string) {
     });
 
     revalidatePath("/");
+    revalidatePath("/feed");
     revalidatePath(`/profile/${session.user.id}`);
 
     return { success: true };

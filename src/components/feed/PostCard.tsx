@@ -45,8 +45,6 @@ export function PostCard({ post }: PostCardProps) {
     }
   };
 
-  if (isDeleted) return null;
-
   const [optimisticLiked, addOptimisticLike] = useOptimistic(
     liked,
     (state, newLiked: boolean) => newLiked
@@ -71,6 +69,8 @@ export function PostCard({ post }: PostCardProps) {
   };
 
   const [aspectRatio, setAspectRatio] = useState(1);
+
+  if (isDeleted) return null;
 
   return (
     <article className="border border-zinc-100/80 rounded-2xl bg-white shadow-sm dark:bg-zinc-950 dark:border-zinc-800/80 overflow-hidden">
