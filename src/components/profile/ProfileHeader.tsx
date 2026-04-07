@@ -146,6 +146,7 @@ function EditProfileDialog({
   const [isPending, startTransition] = useTransition();
   const [preview, setPreview] = useState<string | null>(null);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -156,11 +157,15 @@ function EditProfileDialog({
     }
 
     startTransition(async () => {
+      setError(null);
       const result = await updateProfile(formData);
       if (result.success) {
         setPreview(null);
         setSelectedFile(null);
+        setError(null);
         onOpenChange(false);
+      } else if (result.error) {
+        setError(result.error);
       }
     });
   };
@@ -272,6 +277,12 @@ function EditProfileDialog({
                 placeholder="Tell the world your story..."
               />
             </div>
+
+            {error && (
+              <div className="p-3 rounded-xl bg-red-50 border border-red-100 text-red-600 text-xs font-medium animate-in fade-in slide-in-from-top-1 duration-300">
+                {error}
+              </div>
+            )}
           </div>
 
           <DialogFooter className="flex flex-row items-center justify-center sm:justify-center gap-3 p-8 border-t border-black/5 bg-gradient-to-b from-transparent to-black/[0.02] mx-0 mb-0">
