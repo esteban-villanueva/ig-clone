@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useOptimistic, useTransition } from "react";
+import { useSession } from "next-auth/react";
 import { toggleFollow } from "@/actions/follow";
 import { updateProfile } from "@/actions/profile";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -145,6 +146,7 @@ function EditProfileDialog({
   open: boolean;
   onOpenChange: (open: boolean) => void;
 }) {
+  const { update } = useSession();
   const [isPending, startTransition] = useTransition();
   const [preview, setPreview] = useState<string | null>(null);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
@@ -162,6 +164,11 @@ function EditProfileDialog({
       setError(null);
       const result = await updateProfile(formData);
       if (result.success) {
+        // Update browser session
+        await update({
+          name: formData.get("name"),
+          image: result.imageUrl || user.image,
+        });
         setPreview(null);
         setSelectedFile(null);
         setError(null);

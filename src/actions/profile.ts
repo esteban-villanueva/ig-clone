@@ -36,7 +36,7 @@ export async function updateProfile(formData: FormData) {
     });
 
     revalidatePath(`/profile/${session.user.id}`);
-    return { success: true };
+    return { success: true, imageUrl };
   } catch (error) {
     console.error("Failed to update profile:", error);
     return { error: "Failed to update profile. Please try again." };
