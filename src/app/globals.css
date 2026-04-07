@@ -258,6 +258,18 @@
     animation: gentle-float 5s ease-in-out infinite;
   }
 
+  .brand-icon-hover {
+    @apply transition-all duration-300;
+  }
+
+  .brand-icon-hover:hover {
+    background: var(--landing-gradient);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent !important;
+    transform: scale(1.1);
+  }
+
   @media (prefers-reduced-motion: reduce) {
 
     .animate-fade-up,

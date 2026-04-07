@@ -17,7 +17,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Settings, Camera, User2 } from "lucide-react";
+import { Settings, Camera, User2, UserPlus, UserMinus, Loader2 } from "lucide-react";
 import { getInitials } from "@/lib/utils";
 
 interface ProfileHeaderProps {
@@ -89,18 +89,20 @@ export function ProfileHeader({
                 onOpenChange={setEditOpen}
               />
             ) : (
-              <Button
-                variant={following ? "outline" : "default"}
-                size="sm"
+              <button
                 onClick={handleFollowToggle}
                 disabled={isPending}
+                className="group flex items-center justify-center h-9 w-9 rounded-full brand-icon-hover disabled:opacity-50"
+                title={following ? "Unfollow" : "Follow"}
               >
-                {isPending
-                  ? "..."
-                  : following
-                    ? "Unfollow"
-                    : "Follow"}
-              </Button>
+                {isPending ? (
+                  <Loader2 className="h-4 w-4 animate-spin text-zinc-400" />
+                ) : following ? (
+                  <UserMinus className="h-5 w-5 text-zinc-500" />
+                ) : (
+                  <UserPlus className="h-5 w-5 text-zinc-500" />
+                )}
+              </button>
             )}
           </div>
 
@@ -186,12 +188,12 @@ function EditProfileDialog({
         render={
           <button
             type="button"
-            className="flex items-center justify-center p-2 rounded-full text-zinc-500 hover:text-zinc-900 bg-black/5 hover:bg-black/10 border border-white/30 shadow-sm transition-all duration-300 backdrop-blur-sm"
+            className="flex items-center justify-center h-9 w-9 rounded-full brand-icon-hover"
             title="Settings"
           />
         }
       >
-        <Settings className="w-4 h-4 text-zinc-500" />
+        <Settings className="w-5 h-5 text-zinc-500" />
       </DialogTrigger>
       <DialogContent
         className="overflow-hidden border-none p-0 max-w-sm"

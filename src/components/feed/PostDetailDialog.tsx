@@ -183,7 +183,11 @@ export function PostDetailDialog({ postId, trigger, open: controlledOpen, onOpen
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      {trigger && <div onClick={() => setOpen(true)}>{trigger}</div>}
+      {trigger && (
+        <div onClick={() => setOpen(true)} className="w-full cursor-pointer">
+          {trigger}
+        </div>
+      )}
       <DialogContent
         showCloseButton={false}
         className="max-w-[calc(100%-2rem)] sm:max-w-4xl p-0 overflow-hidden"
@@ -195,16 +199,30 @@ export function PostDetailDialog({ postId, trigger, open: controlledOpen, onOpen
         ) : post ? (
           <div className="flex flex-col md:flex-row h-[85vh] md:h-[75vh]">
             {/* Left side: Image */}
-            <div className="relative w-full min-h-[40vh] md:min-h-0 md:h-full md:w-1/2 bg-black flex flex-shrink-0 items-center justify-center">
+            <div className="relative w-full min-h-[40vh] md:min-h-0 md:h-full md:w-1/2 flex flex-shrink-0 items-center justify-center overflow-hidden">
+              {/* Blurred background */}
+              <div className="absolute inset-0 z-0">
+                <Image
+                  src={post.imageUrl}
+                  alt="blur background"
+                  fill
+                  className="object-cover blur-2xl scale-110 opacity-50 dark:opacity-40"
+                  priority
+                />
+                <div className="absolute inset-0 bg-white/20 dark:bg-black/40 backdrop-blur-md" />
+              </div>
+
+              {/* Main image */}
               <Image
                 src={post.imageUrl}
                 alt={post.caption ?? "Post image"}
                 fill
-                className="object-contain"
+                className="object-contain z-10"
                 sizes="(max-width: 768px) 100vw, 50vw"
                 priority
               />
             </div>
+
 
             {/* Right side: Content */}
             <div className="flex flex-col w-full flex-1 md:w-1/2 md:flex-none md:min-w-0 min-h-0">

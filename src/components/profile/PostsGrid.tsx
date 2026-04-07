@@ -27,7 +27,7 @@ export function PostsGrid({ posts }: PostsGridProps) {
           key={post.id}
           postId={post.id}
           trigger={
-            <div className="relative aspect-square bg-zinc-100 dark:bg-zinc-900 overflow-hidden group cursor-pointer">
+            <div className="relative w-full aspect-square bg-zinc-100 dark:bg-zinc-900 overflow-hidden group cursor-pointer border border-zinc-100/5 dark:border-zinc-800/10 shadow-sm transition-transform duration-300 hover:scale-[1.02]">
               <Image
                 src={post.imageUrl}
                 alt="Post"

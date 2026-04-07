@@ -95,7 +95,7 @@ export function PostCard({ post }: PostCardProps) {
             <button
               onClick={() => setIsConfirmOpen(true)}
               disabled={isDeleting}
-              className="p-2 text-zinc-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-950/30 rounded-full transition-all disabled:opacity-50"
+              className="flex items-center justify-center h-8 w-8 rounded-full text-zinc-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-950/30 transition-all disabled:opacity-50"
               aria-label="Delete post"
             >
               <Trash2 className="h-4 w-4" />
@@ -119,11 +119,23 @@ export function PostCard({ post }: PostCardProps) {
             className="relative w-full bg-zinc-100 dark:bg-zinc-900 border-y border-zinc-100/50 dark:border-zinc-800/50 cursor-pointer overflow-hidden transition-[aspect-ratio] duration-500 ease-in-out"
             style={{ aspectRatio: `${Math.min(1.91, Math.max(0.5625, aspectRatio))}` }}
           >
+            {/* Blurred background */}
+            <div className="absolute inset-0 z-0">
+              <Image
+                src={post.imageUrl}
+                alt="blur background"
+                fill
+                className="object-cover blur-2xl scale-110 opacity-50 dark:opacity-40"
+                priority={false}
+              />
+              <div className="absolute inset-0 bg-white/20 dark:bg-black/40 backdrop-blur-md" />
+            </div>
+
             <Image
               src={post.imageUrl}
               alt={post.caption ?? "Post image"}
               fill
-              className="object-cover"
+              className="object-contain z-10"
               sizes="(max-width: 768px) 100vw, 600px"
               priority={false}
               onLoad={(e) => {
@@ -134,28 +146,30 @@ export function PostCard({ post }: PostCardProps) {
               }}
             />
           </div>
+
         }
       />
 
       {/* Actions */}
-      <div className="flex items-center gap-4 p-3">
+      <div className="flex items-center gap-2 p-3">
         {/* Like button with heart SVG */}
         <button
           type="button"
           aria-label={optimisticLiked ? "Unlike post" : "Like post"}
-          className="hover:opacity-70 transition-opacity"
+          className="brand-icon-hover flex items-center justify-center h-9 w-9 rounded-full"
           onClick={handleLikeToggle}
           disabled={isLikePending}
         >
           <svg
-            width="24"
-            height="24"
+            width="22"
+            height="22"
             viewBox="0 0 24 24"
             fill={optimisticLiked ? "#ef4444" : "none"}
             stroke={optimisticLiked ? "#ef4444" : "currentColor"}
             strokeWidth="2"
             strokeLinecap="round"
             strokeLinejoin="round"
+            className="transition-colors"
           >
             <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
           </svg>
@@ -167,11 +181,11 @@ export function PostCard({ post }: PostCardProps) {
             <button
               type="button"
               aria-label="Comment on post"
-              className="hover:opacity-70 transition-opacity"
+              className="brand-icon-hover flex items-center justify-center h-9 w-9 rounded-full"
             >
               <svg
-                width="24"
-                height="24"
+                width="22"
+                height="22"
                 viewBox="0 0 24 24"
                 fill="none"
                 stroke="currentColor"

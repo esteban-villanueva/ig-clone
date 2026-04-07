@@ -25,6 +25,8 @@ export async function uploadImage(
       {
         folder: "ig-clone",
         upload_preset: "ig_clone_preset",
+        format: "webp",
+        quality: "auto",
       },
       (error, result) => {
         if (error) return reject(error);
